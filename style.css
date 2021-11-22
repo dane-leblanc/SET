@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.unselected {
+  cursor: pointer;
+}
+
 .selected {
   border: solid 3px red;
 }
