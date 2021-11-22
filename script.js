@@ -5,6 +5,7 @@ const shapes = ["diamond", "square", "circle"];
 const fills = ["horizontal", "vertical", "empty"];
 const numbers = [1, 2, 3];
 const $startBtn = $("#start");
+const $addBtn = $("#new-row");
 const $container = $("#container");
 
 let deck = [];
@@ -57,20 +58,23 @@ function addCard() {
 
 function checkForSet(arr) {
   //TODO run logic on selected array
-  let traits = ["color", "shape", "fill", "number"];
-  for (let trait of traits) {
-    if (arr[0][trait] === arr[1][trait] && arr[1][trait] === arr[2][trait]) {
-      console.log(`This is a ${trait} SET!!!`);
-      replaceSelected();
-    }
+  let colorSet = new Set();
+  let numberSet = new Set();
+  let fillSet = new Set();
+  let shapeSet = new Set();
+
+  for (let i = 0; i < 3; i++) {
+    colorSet.add(arr[i]["color"]);
+    numberSet.add(arr[i]["number"]);
+    fillSet.add(arr[i]["fill"]);
+    shapeSet.add(arr[i]["shape"]);
   }
-  let values = [];
-  for (let card of arr) {
-    values.push(...Object.values(card));
-  }
-  if (values.every((e, i, a) => a.indexOf(e) === i)) {
-    console.log("This is a unique SET!!!");
+
+  if (colorSet.size !== 2 && numberSet.size && fillSet.size && shapeSet.size) {
+    console.log("This is a SET!!!");
     replaceSelected();
+  } else {
+    console.log("This is not a SET!!!");
   }
   selected = [];
 }
@@ -98,3 +102,10 @@ $container.on("click", ".unselected", function () {
 });
 
 $startBtn.on("click", makeBoard);
+$addBtn.on("click", function () {
+  for (let i = 0; i < 4; i++) {
+    addCard();
+  }
+});
+
+makeBoard();
