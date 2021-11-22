@@ -1,0 +1,8 @@
+.col-3 {
+  border: solid 1px;
+  text-align: center;
+}
+
+.selected {
+  border: solid 3px red;
+}
