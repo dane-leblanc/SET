@@ -70,7 +70,12 @@ function checkForSet(arr) {
     shapeSet.add(arr[i]["shape"]);
   }
 
-  if (colorSet.size !== 2 && numberSet.size && fillSet.size && shapeSet.size) {
+  if (
+    colorSet.size !== 2 &&
+    numberSet.size !== 2 &&
+    fillSet.size !== 2 &&
+    shapeSet.size !== 2
+  ) {
     console.log("This is a SET!!!");
     replaceSelected();
   } else {
