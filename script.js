@@ -37,6 +37,7 @@ function makeDeck() {
 }
 
 function makeBoard() {
+  board = [];
   makeDeck();
   cardCount = 0;
   if ($(".row")) {
@@ -49,17 +50,6 @@ function makeBoard() {
   }
 }
 
-// function addCard() {
-//   if (cardCount === 81) {
-//     return;
-//   }
-//   let card = deck[cardCount];
-//   $(
-//     `<div id=${cardCount} class="col-3 unselected"> ${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]} </div>`
-//   ).appendTo($(".row"));
-//   cardCount++;
-// }
-
 function addCard() {
   if (cardCount === 81) {
     return;
@@ -69,35 +59,17 @@ function addCard() {
     $(`<div id=${cardCount} class="col-3 unselected"></div>`).appendTo(
       $(".row")
     );
-    for (let i = 0; i < card["number"]; i++) {
-      $(`<i class="bi"></i>`)
-        .addClass(`bi-${card["shape"]}`)
-        .addClass(card["color"])
-        .appendTo($(`#${cardCount}`));
-    }
-    cardCount++;
+    createOutlineCard();
   } else if (card["fill"] === "fill") {
     $(`<div id=${cardCount} class="col-3 unselected"></div>`).appendTo(
       $(".row")
     );
-    for (let i = 0; i < card["number"]; i++) {
-      $(`<i class="bi"></i>`)
-        .addClass(`bi-${card["shape"]}-fill`)
-        .addClass(card["color"])
-        .appendTo($(`#${cardCount}`));
-    }
-    cardCount++;
+    createFillCard();
   } else if (card["fill"] === "back") {
     $(
       `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
     ).appendTo($(".row"));
-    for (let i = 0; i < card["number"]; i++) {
-      $(`<i class="bi"></i>`)
-        .addClass(`bi-${card["shape"]}`)
-        .addClass("white")
-        .appendTo($(`#${cardCount}`));
-    }
-    cardCount++;
+    createBackgroundCard();
   }
 }
 
@@ -121,23 +93,14 @@ function checkForSet(arr) {
     shapeSet.size !== 2
   ) {
     console.log("This is a SET!!!");
-    replaceSelected();
+    selected = [];
+    return true;
   } else {
     console.log("This is not a SET!!!");
+    selected = [];
+    return false;
   }
-  selected = [];
 }
-
-// function replaceSelected() {
-//   for (let $div of $(".selected").get()) {
-//     let card = deck[cardCount];
-//     $(
-//       `<div id=${cardCount} class="col-3 unselected">${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]}</div>`
-//     ).insertAfter($div);
-//     $div.remove();
-//     cardCount++;
-//   }
-// }
 
 function replaceSelected() {
   for (let $div of $(".selected").get()) {
@@ -186,20 +149,25 @@ function replaceSelected() {
 }
 
 // ***This will need a little work***
-// function checkBoardForSet() {
-//   let combs = [];
-//   for (let i = 0; i < board.length - 2; i++) {
-//     for (let j = i + 1; j < board.length - 1; j++) {
-//       for (let k = j + 1; k < board.length; k++) {
-//         let arr = [board[i], board[j], board[k]];
-//         combs.push(arr);
-//       }
-//     }
-//   }
-//   for (let comb of combs) {
-//     checkBoardForSet(comb);
-//   }
-// }
+function checkBoardForSet() {
+  let combs = [];
+  for (let i = 0; i < board.length - 2; i++) {
+    for (let j = i + 1; j < board.length - 1; j++) {
+      for (let k = j + 1; k < board.length; k++) {
+        let arr = [board[i], board[j], board[k]];
+        combs.push(arr);
+      }
+    }
+  }
+  for (let comb of combs) {
+    if (checkForSet(comb)) {
+      alert("There is a set present");
+      return true;
+    }
+  }
+  alert("There is no set present");
+  return false;
+}
 
 $container.on("click", ".unselected", function () {
   $(this).removeClass("unselected").addClass("selected");
@@ -207,15 +175,22 @@ $container.on("click", ".unselected", function () {
     selected.push(deck[$(this).attr("id")]);
   }
   if (selected.length > 2) {
-    checkForSet(selected);
+    if (checkForSet(selected)) {
+      replaceSelected();
+    }
     $(".selected").addClass("unselected").removeClass("selected");
   }
 });
 
 $startBtn.on("click", makeBoard);
+
 $addBtn.on("click", function () {
-  for (let i = 0; i < 4; i++) {
-    addCard();
+  if (checkBoardForSet()) {
+    return;
+  } else {
+    for (let i = 0; i < 4; i++) {
+      addCard();
+    }
   }
 });
 
