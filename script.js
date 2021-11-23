@@ -93,7 +93,6 @@ function checkForSet(arr) {
     shapeSet.size !== 2
   ) {
     console.log("This is a SET!!!");
-    selected = [];
     return true;
   } else {
     console.log("This is not a SET!!!");
@@ -103,49 +102,34 @@ function checkForSet(arr) {
 }
 
 function replaceSelected() {
+  board = board.filter((card) => !selected.includes(card));
+  let card = deck[cardCount];
   for (let $div of $(".selected").get()) {
     if (cardCount === 81) {
       return;
     }
-    let card = deck[cardCount];
+    // let card = deck[cardCount];
     if (card["fill"] === "none") {
       $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
         $div
       );
-      for (let i = 0; i < card["number"]; i++) {
-        $(`<i class="bi"></i>`)
-          .addClass(`bi-${card["shape"]}`)
-          .addClass(card["color"])
-          .appendTo($(`#${cardCount}`));
-      }
+      createOutlineCard();
       $div.remove();
-      cardCount++;
     } else if (card["fill"] === "fill") {
       $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
         $div
       );
-      for (let i = 0; i < card["number"]; i++) {
-        $(`<i class="bi"></i>`)
-          .addClass(`bi-${card["shape"]}-fill`)
-          .addClass(card["color"])
-          .appendTo($(`#${cardCount}`));
-      }
-      cardCount++;
+      createFillCard();
       $div.remove();
     } else if (card["fill"] === "back") {
       $(
         `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
       ).insertAfter($div);
-      for (let i = 0; i < card["number"]; i++) {
-        $(`<i class="bi"></i>`)
-          .addClass(`bi-${card["shape"]}`)
-          .addClass("white")
-          .appendTo($(`#${cardCount}`));
-      }
-      cardCount++;
+      createBackgroundCard();
       $div.remove();
     }
   }
+  selected = [];
 }
 
 // ***This will need a little work***
