@@ -1,8 +1,8 @@
 "use strict";
 
 const colors = ["red", "green", "blue"];
-const shapes = ["diamond", "square", "circle"];
-const fills = ["horizontal", "vertical", "empty"];
+const shapes = ["circle", "triangle", "square"];
+const fills = ["none", "fill", "back"];
 const numbers = [1, 2, 3];
 const $startBtn = $("#start");
 const $addBtn = $("#new-row");
@@ -49,15 +49,56 @@ function makeBoard() {
   }
 }
 
+// function addCard() {
+//   if (cardCount === 81) {
+//     return;
+//   }
+//   let card = deck[cardCount];
+//   $(
+//     `<div id=${cardCount} class="col-3 unselected"> ${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]} </div>`
+//   ).appendTo($(".row"));
+//   cardCount++;
+// }
+
 function addCard() {
   if (cardCount === 81) {
     return;
   }
   let card = deck[cardCount];
-  $(
-    `<div id=${cardCount} class="col-3 unselected"> ${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]} </div>`
-  ).appendTo($(".row"));
-  cardCount++;
+  if (card["fill"] === "none") {
+    $(`<div id=${cardCount} class="col-3 unselected"></div>`).appendTo(
+      $(".row")
+    );
+    for (let i = 0; i < card["number"]; i++) {
+      $(`<i class="bi"></i>`)
+        .addClass(`bi-${card["shape"]}`)
+        .addClass(card["color"])
+        .appendTo($(`#${cardCount}`));
+    }
+    cardCount++;
+  } else if (card["fill"] === "fill") {
+    $(`<div id=${cardCount} class="col-3 unselected"></div>`).appendTo(
+      $(".row")
+    );
+    for (let i = 0; i < card["number"]; i++) {
+      $(`<i class="bi"></i>`)
+        .addClass(`bi-${card["shape"]}-fill`)
+        .addClass(card["color"])
+        .appendTo($(`#${cardCount}`));
+    }
+    cardCount++;
+  } else if (card["fill"] === "back") {
+    $(
+      `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
+    ).appendTo($(".row"));
+    for (let i = 0; i < card["number"]; i++) {
+      $(`<i class="bi"></i>`)
+        .addClass(`bi-${card["shape"]}`)
+        .addClass("white")
+        .appendTo($(`#${cardCount}`));
+    }
+    cardCount++;
+  }
 }
 
 function checkForSet(arr) {
@@ -87,14 +128,60 @@ function checkForSet(arr) {
   selected = [];
 }
 
+// function replaceSelected() {
+//   for (let $div of $(".selected").get()) {
+//     let card = deck[cardCount];
+//     $(
+//       `<div id=${cardCount} class="col-3 unselected">${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]}</div>`
+//     ).insertAfter($div);
+//     $div.remove();
+//     cardCount++;
+//   }
+// }
+
 function replaceSelected() {
   for (let $div of $(".selected").get()) {
+    if (cardCount === 81) {
+      return;
+    }
     let card = deck[cardCount];
-    $(
-      `<div id=${cardCount} class="col-3 unselected">${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]}</div>`
-    ).insertAfter($div);
-    $div.remove();
-    cardCount++;
+    if (card["fill"] === "none") {
+      $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
+        $div
+      );
+      for (let i = 0; i < card["number"]; i++) {
+        $(`<i class="bi"></i>`)
+          .addClass(`bi-${card["shape"]}`)
+          .addClass(card["color"])
+          .appendTo($(`#${cardCount}`));
+      }
+      $div.remove();
+      cardCount++;
+    } else if (card["fill"] === "fill") {
+      $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
+        $div
+      );
+      for (let i = 0; i < card["number"]; i++) {
+        $(`<i class="bi"></i>`)
+          .addClass(`bi-${card["shape"]}-fill`)
+          .addClass(card["color"])
+          .appendTo($(`#${cardCount}`));
+      }
+      cardCount++;
+      $div.remove();
+    } else if (card["fill"] === "back") {
+      $(
+        `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
+      ).insertAfter($div);
+      for (let i = 0; i < card["number"]; i++) {
+        $(`<i class="bi"></i>`)
+          .addClass(`bi-${card["shape"]}`)
+          .addClass("white")
+          .appendTo($(`#${cardCount}`));
+      }
+      cardCount++;
+      $div.remove();
+    }
   }
 }
 
