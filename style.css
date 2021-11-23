@@ -8,7 +8,11 @@
 }
 
 .selected {
-  border: solid 3px red;
+  border: solid 5px gold;
+}
+
+.set {
+  border: solid 3px gold;
 }
 
 .bi {

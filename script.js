@@ -103,29 +103,31 @@ function checkForSet(arr) {
 
 function replaceSelected() {
   board = board.filter((card) => !selected.includes(card));
-  let card = deck[cardCount];
   for (let $div of $(".selected").get()) {
-    if (cardCount === 81) {
-      return;
-    }
-    // let card = deck[cardCount];
+    let card = deck[cardCount];
     if (card["fill"] === "none") {
-      $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
-        $div
-      );
-      createOutlineCard();
+      if (cardCount !== 81) {
+        $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
+          $div
+        );
+        createOutlineCard();
+      }
       $div.remove();
     } else if (card["fill"] === "fill") {
-      $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
-        $div
-      );
-      createFillCard();
+      if (cardCount !== 81) {
+        $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
+          $div
+        );
+        createFillCard();
+      }
       $div.remove();
     } else if (card["fill"] === "back") {
-      $(
-        `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
-      ).insertAfter($div);
-      createBackgroundCard();
+      if (cardCount !== 81) {
+        $(
+          `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
+        ).insertAfter($div);
+        createBackgroundCard();
+      }
       $div.remove();
     }
   }
@@ -146,6 +148,9 @@ function checkBoardForSet() {
   for (let comb of combs) {
     if (checkForSet(comb)) {
       alert("There is a set present");
+      for (let card of comb) {
+        console.log(card);
+      }
       return true;
     }
   }
