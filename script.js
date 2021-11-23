@@ -9,6 +9,7 @@ const $addBtn = $("#new-row");
 const $container = $("#container");
 
 let deck = [];
+let board = [];
 let selected = [];
 let cardCount = 0;
 
@@ -49,6 +50,9 @@ function makeBoard() {
 }
 
 function addCard() {
+  if (cardCount === 81) {
+    return;
+  }
   let card = deck[cardCount];
   $(
     `<div id=${cardCount} class="col-3 unselected"> ${card["number"]} ${card["fill"]} ${card["color"]} ${card["shape"]} </div>`
@@ -57,7 +61,6 @@ function addCard() {
 }
 
 function checkForSet(arr) {
-  //TODO run logic on selected array
   let colorSet = new Set();
   let numberSet = new Set();
   let fillSet = new Set();
@@ -94,6 +97,22 @@ function replaceSelected() {
     cardCount++;
   }
 }
+
+// ***This will need a little work***
+// function checkBoardForSet() {
+//   let combs = [];
+//   for (let i = 0; i < board.length - 2; i++) {
+//     for (let j = i + 1; j < board.length - 1; j++) {
+//       for (let k = j + 1; k < board.length; k++) {
+//         let arr = [board[i], board[j], board[k]];
+//         combs.push(arr);
+//       }
+//     }
+//   }
+//   for (let comb of combs) {
+//     checkBoardForSet(comb);
+//   }
+// }
 
 $container.on("click", ".unselected", function () {
   $(this).removeClass("unselected").addClass("selected");
