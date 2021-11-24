@@ -81,20 +81,32 @@ function addCard() {
   let card = deck[cardCount];
   if (card["fill"] === "none") {
     //add div to the grid with an id equal to the cards position in the deck (id is helpful for debugging)
-    $(`<div id=${cardCount} class="col-3 unselected"></div>`).appendTo(
-      $(".row")
+    $(
+      `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
+    ).appendTo($(".row"));
+
+    $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
+      `#${cardCount}`
     );
     //create card functions are in card.js file
     createOutlineCard();
   } else if (card["fill"] === "fill") {
-    $(`<div id=${cardCount} class="col-3 unselected"></div>`).appendTo(
-      $(".row")
+    $(
+      `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
+    ).appendTo($(".row"));
+
+    $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
+      `#${cardCount}`
     );
     createFillCard();
   } else if (card["fill"] === "back") {
     $(
-      `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
+      `<div id=${cardCount} class="col-3 unselected px-1 py-1" ></div>`
     ).appendTo($(".row"));
+
+    $(
+      `<div id="card${cardCount}" class="gameCard" style="background-color:${card["color"]}"></div>`
+    ).appendTo(`#${cardCount}`);
     createBackgroundCard();
   }
 }
@@ -140,16 +152,22 @@ function replaceSelected() {
     if (card["fill"] === "none") {
       //only add new cards if there are cards left in the deck
       if (cardCount !== 81) {
-        $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
-          $div
+        $(
+          `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
+        ).insertAfter($div);
+        $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
+          `#${cardCount}`
         );
         createOutlineCard();
       }
       $div.remove();
     } else if (card["fill"] === "fill") {
       if (cardCount !== 81) {
-        $(`<div id=${cardCount} class="col-3 unselected"></div>`).insertAfter(
-          $div
+        $(
+          `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
+        ).insertAfter($div);
+        $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
+          `#${cardCount}`
         );
         createFillCard();
       }
@@ -157,8 +175,11 @@ function replaceSelected() {
     } else if (card["fill"] === "back") {
       if (cardCount !== 81) {
         $(
-          `<div id=${cardCount} class="col-3 unselected" style="background-color:${card["color"]}"></div>`
+          `<div id=${cardCount} class="col-3 unselected px-1 py-1" ></div>`
         ).insertAfter($div);
+        $(
+          `<div id="card${cardCount}" class="gameCard" style="background-color:${card["color"]}"></div>`
+        ).appendTo(`#${cardCount}`);
         createBackgroundCard();
       }
       $div.remove();
@@ -223,7 +244,7 @@ $addBtn.on("click", function () {
 $hintBtn.on("click", function () {
   //check for set on board, show user first card of first set found
   let id = checkBoardForSet()[1]["cardNum"];
-  $(`#${id}`).addClass("setHint");
+  $(`#${id} > div`).addClass("setHint");
   return;
 });
 

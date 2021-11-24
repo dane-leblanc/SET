@@ -7,7 +7,7 @@ function createOutlineCard() {
     $(`<i class="bi"></i>`)
       .addClass(`bi-${card["shape"]}`)
       .addClass(card["color"])
-      .appendTo($(`#${cardCount}`));
+      .appendTo($(`#card${cardCount}`));
   }
   //include these card objects in the board array.
   board.push(deck[cardCount]);
@@ -21,7 +21,7 @@ function createFillCard() {
     $(`<i class="bi"></i>`)
       .addClass(`bi-${card["shape"]}-fill`)
       .addClass(card["color"])
-      .appendTo($(`#${cardCount}`));
+      .appendTo($(`#card${cardCount}`));
   }
   board.push(deck[cardCount]);
   cardCount++;
@@ -33,7 +33,7 @@ function createBackgroundCard() {
     $(`<i class="bi"></i>`)
       .addClass(`bi-${card["shape"]}`)
       .addClass("white")
-      .appendTo($(`#${cardCount}`));
+      .appendTo($(`#card${cardCount}`));
   }
   board.push(deck[cardCount]);
   cardCount++;
