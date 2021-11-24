@@ -6,7 +6,9 @@ const fills = ["none", "fill", "back"];
 const numbers = [1, 2, 3];
 const $startBtn = $("#start");
 const $addBtn = $("#new-row");
+const $hintBtn = $("#hint");
 const $container = $("#container");
+const $btnContainer = $("#btn-container");
 
 let deck = [];
 //board is the collection of cards that are currently showing and in play
@@ -15,9 +17,14 @@ let board = [];
 let selected = [];
 //card cound will represent how deep we are in the deck
 let cardCount = 0;
+let cardsRemaining = 81;
 
 function makeDeck() {
   //Create 81 unique "cards" (objects with four charactaristics) and put them in the deck array.
+  cardsRemaining = 81;
+  if ($(".remain")) {
+    $(".remain").remove();
+  }
   deck = [];
   for (let shape of shapes) {
     for (let color of colors) {
@@ -33,11 +40,20 @@ function makeDeck() {
       }
     }
   }
+  //Show user how many cards remain in game
+  $(`<span class="remain">Cards Remaining: ${cardsRemaining}</span>`).appendTo(
+    $btnContainer
+  );
   //shuffle deck
   deck = deck
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
+  let i = 0;
+  for (let card of deck) {
+    card["cardNum"] = i;
+    i++;
+  }
 }
 
 function makeBoard() {
@@ -148,7 +164,9 @@ function replaceSelected() {
       $div.remove();
     }
   }
+  cardsRemaining -= 3;
   //reset selected array
+  $(".remain").text(`Cards Remaining: ${cardsRemaining}`);
   selected = [];
 }
 
@@ -166,11 +184,7 @@ function checkBoardForSet() {
   //loop through all of the three card combos and run checkForSet function on each of them. Return true if there is a possible SET out there, false if not.
   for (let comb of combs) {
     if (checkForSet(comb)) {
-      alert("There is a set present");
-      for (let card of comb) {
-        console.log(card);
-      }
-      return true;
+      return comb;
     }
   }
   alert("There is no set present");
@@ -197,12 +211,20 @@ $startBtn.on("click", makeBoard);
 $addBtn.on("click", function () {
   //request an additional row to be added to the board. Request will only be granted if there are no possible SETs on the board.
   if (checkBoardForSet()) {
+    alert("There is a set present. You are not allowed an extra row.");
     return;
   } else {
     for (let i = 0; i < 4; i++) {
       addCard();
     }
   }
+});
+
+$hintBtn.on("click", function () {
+  //check for set on board, show user first card of first set found
+  let id = checkBoardForSet()[1]["cardNum"];
+  $(`#${id}`).addClass("setHint");
+  return;
 });
 
 makeBoard();

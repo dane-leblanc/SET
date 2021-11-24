@@ -18,11 +18,16 @@
     />
   </head>
   <body>
-    <h1>SET</h1>
-    <button id="start" type="button" class="btn btn-primary btn-lg">
-      Begin New Game
-    </button>
-    <button id="new-row" class="btn btn-secondary">Add Row</button>
+    <h1>SET SOLITAIRE</h1>
+    <div id="btn-container" class="container">
+      <button id="start" type="button" class="btn btn-primary btn-lg">
+        Begin New Game
+      </button>
+      <button id="hint" class="btn btn-secondary">Request Hint</button>
+      <button id="new-row" class="btn btn-secondary">
+        Request Additional Row
+      </button>
+    </div>
     <div class="container" id="container"></div>
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
