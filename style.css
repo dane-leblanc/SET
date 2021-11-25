@@ -36,11 +36,11 @@ h1 {
 }
 
 .setHint {
-  border: solid 5px blueviolet;
+  outline: solid 5px blueviolet;
 }
 
 .selected {
-  border: solid 5px gold;
+  outline: solid 5px gold;
 }
 
 .bi {
