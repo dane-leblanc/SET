@@ -46,6 +46,7 @@ h1 {
 .bi {
   font-size: 50px;
   padding: 0.2em;
+  vertical-align: text-bottom;
 }
 
 .red {
@@ -62,4 +63,16 @@ h1 {
 
 .white {
   color: white;
+}
+
+@media only screen and (min-width: 765px) and (max-width: 991px) {
+  .col-3 {
+    height: 170px;
+  }
+}
+
+@media only screen and (max-width: 765px) {
+  .col-3 {
+    height: 250px;
+  }
 }
