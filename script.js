@@ -59,10 +59,12 @@ function makeDeck() {
 }
 
 function makeBoard() {
-  //reset board array, deck, and card count
+  //reset board array, deck, selected cards, and card count
   board = [];
   makeDeck();
   cardCount = 0;
+  $(".selected").addClass("unselected").removeClass("selected");
+  selected = [];
   //remove grid if needed
   if ($(".row")) {
     $(".row").remove();
@@ -83,14 +85,14 @@ function checkForSet(arr) {
   let fillSet = new Set();
   let shapeSet = new Set();
 
-  //put charactaristics of each selected card into a Set (unfortunate name for this situation) representing that charactaristic. According to the rules, the cards cannot consitute a SET if for any charactaristic exactly two cards match.
+  //put charactaristics of each selected card into a Set (unfortunate name for this situation) representing that charactaristic. According to the rules, the cards cannot consitute a SET if for any charactaristic exactly two cards match. The Set will automatically eliminate any duplicates.
   for (let i = 0; i < 3; i++) {
     colorSet.add(arr[i]["color"]);
     numberSet.add(arr[i]["number"]);
     fillSet.add(arr[i]["fill"]);
     shapeSet.add(arr[i]["shape"]);
   }
-
+  //A SET is achieved if the set for each charactaristic has either 1 or 3 elements (not 2).
   if (
     colorSet.size !== 2 &&
     numberSet.size !== 2 &&
@@ -177,9 +179,16 @@ function checkBoardForSet() {
   return false;
 }
 
+function undoCardSelections() {
+  //removes selected class from divs and outline from selected cards
+  $(".selected").addClass("unselected").removeClass("selected");
+  $(".selected-border").removeClass("selected-border");
+}
+
 $container.on("click", ".unselected", function () {
   //user is slecting cards they think make a SET. Once three cards are selected, run checkForSet function.
   $(this).removeClass("unselected").addClass("selected");
+  console.log($(this).children().addClass("selected-border"));
   if (selected.length < 3) {
     selected.push(deck[$(this).attr("id")]);
   }
@@ -188,7 +197,7 @@ $container.on("click", ".unselected", function () {
       //if the cards form a set, replace those cards.
       replaceSelected();
     }
-    $(".selected").addClass("unselected").removeClass("selected");
+    undoCardSelections();
   }
 });
 
@@ -198,13 +207,13 @@ $addBtn.on("click", function () {
   //request an additional row to be added to the board. Request will only be granted if there are no possible SETs on the board.
   if (checkBoardForSet()) {
     alert("There is a set present. You are not allowed an extra row.");
-    $(".selected").addClass("unselected").removeClass("selected");
+    undoCardSelections();
     return;
   } else {
     for (let i = 0; i < 4; i++) {
       addCard();
     }
-    $(".selected").addClass("unselected").removeClass("selected");
+    undoCardSelections();
   }
 });
 
@@ -214,15 +223,15 @@ $hintBtn.on("click", function () {
   if (hints === 0) {
     let id = checkBoardForSet()[1]["cardNum"];
     $(`#${id} > div`).addClass("setHint");
-    $(".selected").addClass("unselected").removeClass("selected");
+    undoCardSelections();
     return;
     //if hint is requested again, show the second card of that set
   } else if (hints === 1) {
     let id = checkBoardForSet()[0]["cardNum"];
     $(`#${id} > div`).addClass("setHint");
-    $(".selected").addClass("unselected").removeClass("selected");
+    undoCardSelections();
     return;
-    //if hint is requested again...
+    //if hint is requested again give encouragement
   } else if (hints === 2) {
     alert(
       "For any two cards, there is only one other card in the dack that would create a set. You can do this! "

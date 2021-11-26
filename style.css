@@ -36,7 +36,7 @@ h1 {
   outline: solid 5px blueviolet;
 }
 
-.selected {
+.selected-border {
   outline: solid 5px gold;
 }
 
