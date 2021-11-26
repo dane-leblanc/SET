@@ -1,5 +1,40 @@
 "use strict";
 
+function addCard() {
+  //function does not run if the entire deck is run through.
+  if (cardCount === 81) {
+    return;
+  }
+  //based on the charactaristics of the next card in the deck, put card image in specified grid location to represent that card. Since we are using separate bootstrap icons for the same shape but different "fill", we need three different "create card" functions.
+  let card = deck[cardCount];
+  if (card["fill"] === "none") {
+    //add div to the grid with an id equal to the cards position in the deck (id is helpful for debugging)
+    $(
+      `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
+    ).appendTo($(".row"));
+    $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
+      `#${cardCount}`
+    );
+    createOutlineCard();
+  } else if (card["fill"] === "fill") {
+    $(
+      `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
+    ).appendTo($(".row"));
+    $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
+      `#${cardCount}`
+    );
+    createFillCard();
+  } else if (card["fill"] === "back") {
+    $(
+      `<div id=${cardCount} class="col-3 unselected px-1 py-1" ></div>`
+    ).appendTo($(".row"));
+    $(
+      `<div id="card${cardCount}" class="gameCard" style="background-color:${card["color"]}"></div>`
+    ).appendTo(`#${cardCount}`);
+    createBackgroundCard();
+  }
+}
+
 function createOutlineCard() {
   let card = deck[cardCount];
   //Place bootstrap icon(s) in grid and style in accordance with the charactaristics of the card

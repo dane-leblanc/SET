@@ -20,11 +20,12 @@ let cardCount = 0;
 let cardsRemaining = 81;
 
 function makeDeck() {
-  //Create 81 unique "cards" (objects with four charactaristics) and put them in the deck array.
+  //Reset cards remaining
   cardsRemaining = 81;
   if ($(".remain")) {
     $(".remain").remove();
   }
+  //Create 81 unique "cards" (objects with four charactaristics) and put them in the deck array.
   deck = [];
   for (let shape of shapes) {
     for (let color of colors) {
@@ -41,7 +42,7 @@ function makeDeck() {
     }
   }
   //Show user how many cards remain in game
-  $(`<span class="remain">Cards Remaining: ${cardsRemaining}</span>`).appendTo(
+  $(`<div class="remain">Cards Remaining: ${cardsRemaining}</div>`).appendTo(
     $btnContainer
   );
   //shuffle deck
@@ -49,6 +50,7 @@ function makeDeck() {
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
+  //Give each key/value pair indicating their index in deck array.
   let i = 0;
   for (let card of deck) {
     card["cardNum"] = i;
@@ -68,58 +70,20 @@ function makeBoard() {
   $('<div class="row">').appendTo($container);
   //game starts with 16 cards on the board
   for (let i = 0; i < 16; i++) {
+    //addCard function in cards.js file
     addCard();
-  }
-}
-
-function addCard() {
-  //function does not run if the entire deck is run through.
-  if (cardCount === 81) {
-    return;
-  }
-  //based on the charactaristics of the next card in the deck, put card image in specified grid location to represent that card. Since we are using separate bootstrap icons for the same shape but different "fill", we need three different "create card" functions.
-  let card = deck[cardCount];
-  if (card["fill"] === "none") {
-    //add div to the grid with an id equal to the cards position in the deck (id is helpful for debugging)
-    $(
-      `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
-    ).appendTo($(".row"));
-
-    $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
-      `#${cardCount}`
-    );
-    //create card functions are in card.js file
-    createOutlineCard();
-  } else if (card["fill"] === "fill") {
-    $(
-      `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
-    ).appendTo($(".row"));
-
-    $(`<div id="card${cardCount}" class="gameCard"></div>`).appendTo(
-      `#${cardCount}`
-    );
-    createFillCard();
-  } else if (card["fill"] === "back") {
-    $(
-      `<div id=${cardCount} class="col-3 unselected px-1 py-1" ></div>`
-    ).appendTo($(".row"));
-
-    $(
-      `<div id="card${cardCount}" class="gameCard" style="background-color:${card["color"]}"></div>`
-    ).appendTo(`#${cardCount}`);
-    createBackgroundCard();
   }
 }
 
 function checkForSet(arr) {
   //when three cards are selected, check if they satisfy the game conditions of a SET.
+
   let colorSet = new Set();
   let numberSet = new Set();
   let fillSet = new Set();
   let shapeSet = new Set();
 
   //put charactaristics of each selected card into a Set (unfortunate name for this situation) representing that charactaristic. According to the rules, the cards cannot consitute a SET if for any charactaristic exactly two cards match.
-
   for (let i = 0; i < 3; i++) {
     colorSet.add(arr[i]["color"]);
     numberSet.add(arr[i]["number"]);
@@ -185,9 +149,10 @@ function replaceSelected() {
       $div.remove();
     }
   }
+  //Update cards remaining
   cardsRemaining -= 3;
-  //reset selected array
   $(".remain").text(`Cards Remaining: ${cardsRemaining}`);
+  //reset selected array
   selected = [];
 }
 
@@ -233,19 +198,36 @@ $addBtn.on("click", function () {
   //request an additional row to be added to the board. Request will only be granted if there are no possible SETs on the board.
   if (checkBoardForSet()) {
     alert("There is a set present. You are not allowed an extra row.");
+    $(".selected").addClass("unselected").removeClass("selected");
     return;
   } else {
     for (let i = 0; i < 4; i++) {
       addCard();
     }
+    $(".selected").addClass("unselected").removeClass("selected");
   }
 });
 
 $hintBtn.on("click", function () {
   //check for set on board, show user first card of first set found
-  let id = checkBoardForSet()[1]["cardNum"];
-  $(`#${id} > div`).addClass("setHint");
-  return;
+  let hints = $(".setHint").get().length;
+  if (hints === 0) {
+    let id = checkBoardForSet()[1]["cardNum"];
+    $(`#${id} > div`).addClass("setHint");
+    $(".selected").addClass("unselected").removeClass("selected");
+    return;
+    //if hint is requested again, show the second card of that set
+  } else if (hints === 1) {
+    let id = checkBoardForSet()[0]["cardNum"];
+    $(`#${id} > div`).addClass("setHint");
+    $(".selected").addClass("unselected").removeClass("selected");
+    return;
+    //if hint is requested again...
+  } else if (hints === 2) {
+    alert(
+      "For any two cards, there is only one other card in the dack that would create a set. You can do this! "
+    );
+  }
 });
 
 makeBoard();
