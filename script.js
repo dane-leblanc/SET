@@ -41,10 +41,6 @@ function makeDeck() {
       }
     }
   }
-  //Show user how many cards remain in game
-  $(`<div class="remain">Cards Remaining: ${cardsRemaining}</div>`).appendTo(
-    $btnContainer
-  );
   //shuffle deck
   deck = deck
     .map((value) => ({ value, sort: Math.random() }))
@@ -70,6 +66,10 @@ function makeBoard() {
     $(".row").remove();
   }
   $('<div class="row">').appendTo($container);
+  //Show user how many cards remain in game
+  $(`<div class="remain">Cards Remaining: ${cardsRemaining}</div>`).appendTo(
+    $btnContainer
+  );
   //game starts with 16 cards on the board
   for (let i = 0; i < 12; i++) {
     //addCard function in cards.js file
@@ -99,10 +99,8 @@ function checkForSet(arr) {
     fillSet.size !== 2 &&
     shapeSet.size !== 2
   ) {
-    console.log("This is a SET!!!");
     return true;
   } else {
-    console.log("This is not a SET!!!");
     selected = [];
     return false;
   }
@@ -113,11 +111,14 @@ function replaceSelected() {
 
   //remove selected SET from board array.
   board = board.filter((card) => !selected.includes(card));
+  //replace with new cards from the deck
   for (let $div of $(".selected").get()) {
     let card = deck[cardCount];
-    if (card["fill"] === "none") {
-      //only add new cards if there are cards left in the deck and there are only 12 cards on board.
-      if (cardCount !== 81 && board.length < 13) {
+    //only add new cards if there are cards left in the deck and there are only 12 cards on board.
+    if (cardCount === 81 || board.length > 12) {
+      return;
+    } else {
+      if (card["fill"] === "none") {
         $(
           `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
         ).insertAfter($div);
@@ -125,10 +126,8 @@ function replaceSelected() {
           `#${cardCount}`
         );
         createOutlineCard();
-      }
-      $div.remove();
-    } else if (card["fill"] === "fill") {
-      if (cardCount !== 81) {
+        $div.remove();
+      } else if (card["fill"] === "fill") {
         $(
           `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
         ).insertAfter($div);
@@ -136,10 +135,8 @@ function replaceSelected() {
           `#${cardCount}`
         );
         createFillCard();
-      }
-      $div.remove();
-    } else if (card["fill"] === "back") {
-      if (cardCount !== 81) {
+        $div.remove();
+      } else if (card["fill"] === "back") {
         $(
           `<div id=${cardCount} class="col-3 unselected px-1 py-1" ></div>`
         ).insertAfter($div);
@@ -147,8 +144,8 @@ function replaceSelected() {
           `<div id="card${cardCount}" class="gameCard" style="background-color:${card["color"]}"></div>`
         ).appendTo(`#${cardCount}`);
         createBackgroundCard();
+        $div.remove();
       }
-      $div.remove();
     }
   }
   //Update cards remaining
@@ -156,6 +153,10 @@ function replaceSelected() {
   $(".remain").text(`Cards Remaining: ${cardsRemaining}`);
   //reset selected array
   selected = [];
+  // check for gameOver
+  if (board === []) {
+    alert("You have completed the game! Great Work!!!");
+  }
 }
 
 function checkBoardForSet() {
