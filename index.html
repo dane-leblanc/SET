@@ -18,17 +18,114 @@
     />
   </head>
   <body>
-    <h1>SET SOLITAIRE</h1>
+    <div class="container">
+      <h1>SET SOLITAIRE</h1>
+    </div>
     <div id="btn-container" class="container">
       <button id="start" type="button" class="btn btn-primary btn-lg">
         Begin New Game
       </button>
       <button id="hint" class="btn btn-secondary btn-lg">Request Hint</button>
       <button id="new-row" class="btn btn-secondary btn-lg">
-        Request Additional Row
+        Request Additional Cards
       </button>
     </div>
     <div class="container" id="container"></div>
+    <!-- Large modal -->
+    <div class="py-3 px-2">
+      <button
+        type="button"
+        class="btn btn-info float-right"
+        data-toggle="modal"
+        data-target=".instructions-modal"
+      >
+        Rules and Instructions
+      </button>
+    </div>
+    <div
+      class="modal fade instructions-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myLargeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3 class="modal-title">Rules</h3>
+            <p>
+              The object of the game is to identify a <i>SET</i> of 3 cards from
+              12 cards placed face up on the table. Each card has four features,
+              which can vary as follows.
+            </p>
+            <p>
+              <b
+                >SHAPE: Circle <i class="bi-circle green"></i>, Triangle
+                <i class="bi-triangle green"></i>, Square
+                <i class="bi-square green"></i
+              ></b>
+            </p>
+            <p>
+              <b
+                >NUMBER: One <i class="bi-circle blue"></i>, Two
+                <i class="bi-circle blue"></i> <i class="bi-circle blue"></i>,
+                Three <i class="bi-circle blue"></i>
+                <i class="bi-circle blue"> </i><i class="bi-circle blue"></i>.
+              </b>
+            </p>
+            <p>
+              <b
+                >COLOR: Red <i class="bi-circle-fill red"></i>, Green
+                <i class="bi-circle-fill green"></i>, Blue
+                <i class="bi-circle-fill blue"></i
+              ></b>
+            </p>
+            <p>
+              <b
+                >SHADING: Hollow <i class="bi-circle red"></i>, Full
+                <i class="bi-circle-fill red"></i>, Background
+                <span style="color: red; background-color: red">
+                  . <i class="bi-circle white"></i> .</span
+                ></b
+              >
+            </p>
+            <p>
+              A <i>SET</i> consists of 3 cards in which each of the cards'
+              features, looked at one-by-one, are the same on each card, or, are
+              different on each card. All the features must separately satisfy
+              this rule. In other words: shape must be either the same on all
+              three cards, or different on each of the 3 cards; color must be
+              either the same on all 3 cards, or different on each of the 3,
+              etc.
+            </p>
+            <p class="h4">A QUICK CHECK - Is it a SET??</p>
+            <p>
+              If 2 cards are the same and 1 card is different in any feature,
+              then it is not a <i>SET</i>. For example, if 2 are red and 1 is
+              purple then it is not a <i>SET</i>. A <i>SET</i> must be either
+              all the same OR all different in each individual feature.
+            </p>
+            <p class="h5">What if I can't find a <i>SET</i>?</p>
+            <p>
+              If you cannot find a set, it could be because there are none
+              available on the board. If there are no <i>SET</i>s available you
+              are allowed to put three additonal cards on the board. You will
+              only be granted additional cards if there are truly no sets
+              available. If you have added more cards to the board, your
+              <i>SET</i>s will not be replaced with new cards until you go below
+              12.
+            </p>
+            <p>
+              You may also request a "hint" (this feature is only available with
+              this version and not part of the original card game). When doing
+              so, a card that is part of an available <i>SET</i> will be
+              outlined. If you request another hint, a second card of the same
+              <i>SET</i> will also be outlined.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

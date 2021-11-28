@@ -71,7 +71,7 @@ function makeBoard() {
   }
   $('<div class="row">').appendTo($container);
   //game starts with 16 cards on the board
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 12; i++) {
     //addCard function in cards.js file
     addCard();
   }
@@ -116,8 +116,8 @@ function replaceSelected() {
   for (let $div of $(".selected").get()) {
     let card = deck[cardCount];
     if (card["fill"] === "none") {
-      //only add new cards if there are cards left in the deck
-      if (cardCount !== 81) {
+      //only add new cards if there are cards left in the deck and there are only 12 cards on board.
+      if (cardCount !== 81 && board.length < 13) {
         $(
           `<div id=${cardCount} class="col-3 unselected px-1 py-1"></div>`
         ).insertAfter($div);
@@ -175,7 +175,7 @@ function checkBoardForSet() {
       return comb;
     }
   }
-  alert("There is no set present");
+  alert("There is no set present.");
   return false;
 }
 
@@ -188,7 +188,7 @@ function undoCardSelections() {
 $container.on("click", ".unselected", function () {
   //user is slecting cards they think make a SET. Once three cards are selected, run checkForSet function.
   $(this).removeClass("unselected").addClass("selected");
-  console.log($(this).children().addClass("selected-border"));
+  $(this).children().addClass("selected-border");
   if (selected.length < 3) {
     selected.push(deck[$(this).attr("id")]);
   }
@@ -204,13 +204,13 @@ $container.on("click", ".unselected", function () {
 $startBtn.on("click", makeBoard);
 
 $addBtn.on("click", function () {
-  //request an additional row to be added to the board. Request will only be granted if there are no possible SETs on the board.
+  //request additional cards to be added to the board. Request will only be granted if there are no possible SETs on the board.
   if (checkBoardForSet()) {
-    alert("There is a set present. You are not allowed an extra row.");
+    alert("There is a set present. You are not allowed any extra cards.");
     undoCardSelections();
     return;
   } else {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       addCard();
     }
     undoCardSelections();
