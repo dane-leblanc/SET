@@ -115,8 +115,8 @@ function replaceSelected() {
   for (let $div of $(".selected").get()) {
     let card = deck[cardCount];
     //only add new cards if there are cards left in the deck and there are only 12 cards on board.
-    if (cardCount === 81 || board.length > 12) {
-      return;
+    if (cardCount === 81 || board.length > 11) {
+      $div.remove();
     } else {
       if (card["fill"] === "none") {
         $(
@@ -210,6 +210,9 @@ $addBtn.on("click", function () {
     alert("There is a set present. You are not allowed any extra cards.");
     undoCardSelections();
     return;
+  } else if (board.length === cardsRemaining) {
+    alert("There are no cards left in the deck!");
+    undoCardSelections();
   } else {
     for (let i = 0; i < 3; i++) {
       addCard();
