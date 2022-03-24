@@ -5,7 +5,7 @@ function addCard() {
   if (cardCount === 81) {
     return;
   }
-  //based on the charactaristics of the next card in the deck, put card image in specified grid location to represent that card. Since we are using separate bootstrap icons for the same shape but different "fill", we need three different "create card" functions.
+  //based on the characteristics of the next card in the deck, put card image in specified grid location to represent that card. Since we are using separate bootstrap icons for the same shape but different "fill", we need three different "create card" functions.
   let card = deck[cardCount];
   if (card["fill"] === "none") {
     //add div to the grid with an id equal to the cards position in the deck (id is helpful for debugging)
@@ -37,7 +37,7 @@ function addCard() {
 
 function createOutlineCard() {
   let card = deck[cardCount];
-  //Place bootstrap icon(s) in grid and style in accordance with the charactaristics of the card
+  //Place bootstrap icon(s) in grid and style in accordance with the characteristics of the card
   for (let i = 0; i < card["number"]; i++) {
     $(`<i class="bi"></i>`)
       .addClass(`bi-${card["shape"]}`)

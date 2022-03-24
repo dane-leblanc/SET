@@ -13,9 +13,9 @@ const $btnContainer = $("#btn-container");
 let deck = [];
 //board is the collection of cards that are currently showing and in play
 let board = [];
-//selected is a collection of the cards that user selects
+//selected is a collection of the cards that user selects for a SET (can be length 1, 2, or 3)
 let selected = [];
-//card cound will represent how deep we are in the deck
+//card count will represent how deep we are in the deck
 let cardCount = 0;
 let cardsRemaining = 81;
 
@@ -25,7 +25,7 @@ function makeDeck() {
   if ($(".remain")) {
     $(".remain").remove();
   }
-  //Create 81 unique "cards" (objects with four charactaristics) and put them in the deck array.
+  //Create 81 unique "cards" (objects with four characteristics) and put them in the deck array.
   deck = [];
   for (let shape of shapes) {
     for (let color of colors) {
@@ -70,7 +70,7 @@ function makeBoard() {
   $(`<div class="remain">Cards Remaining: ${cardsRemaining}</div>`).appendTo(
     $btnContainer
   );
-  //game starts with 16 cards on the board
+  //game starts with 12 cards on the board
   for (let i = 0; i < 12; i++) {
     //addCard function in cards.js file
     addCard();
@@ -85,14 +85,14 @@ function checkForSet(arr) {
   let fillSet = new Set();
   let shapeSet = new Set();
 
-  //put charactaristics of each selected card into a Set (unfortunate name for this situation) representing that charactaristic. According to the rules, the cards cannot consitute a SET if for any charactaristic exactly two cards match. The Set will automatically eliminate any duplicates.
+  //put characteristics of each selected card into a Set (unfortunate name for this situation) representing that characteristic. According to the rules, the cards cannot constitute a SET if for any characteristic exactly two cards match. The Set will automatically eliminate any duplicates.
   for (let i = 0; i < 3; i++) {
     colorSet.add(arr[i]["color"]);
     numberSet.add(arr[i]["number"]);
     fillSet.add(arr[i]["fill"]);
     shapeSet.add(arr[i]["shape"]);
   }
-  //A SET is achieved if the set for each charactaristic has either 1 or 3 elements (not 2).
+  //A SET is achieved if the set for each characteristic has either 1 or 3 elements (not 2).
   if (
     colorSet.size !== 2 &&
     numberSet.size !== 2 &&
@@ -187,7 +187,7 @@ function undoCardSelections() {
 }
 
 $container.on("click", ".unselected", function () {
-  //user is slecting cards they think make a SET. Once three cards are selected, run checkForSet function.
+  //user is selecting cards they think make a SET. Once three cards are selected, run checkForSet function.
   $(this).removeClass("unselected").addClass("selected");
   $(this).children().addClass("selected-border");
   if (selected.length < 3) {
